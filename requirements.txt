@@ -11,4 +11,4 @@ python-jose
 python-multipart
 pytest
 httpx
-requests
+python-dotenv

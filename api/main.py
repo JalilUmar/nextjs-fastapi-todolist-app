@@ -12,7 +12,7 @@ user_models.Base.metadata.create_all(bind=engine)
 todo_models.Base.metadata.create_all(bind=engine)
 
 
-@app.get("/")
+@app.get("/hello")
 def hello_world():
     return {"message": "Hello World"}
 
