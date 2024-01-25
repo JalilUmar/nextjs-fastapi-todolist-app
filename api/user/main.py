@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, status, HTTPException
 from sqlalchemy.orm import Session
 from sqlalchemy import cast, String
-from dependencies import get_db, get_current_user
+from ..dependencies import get_db, get_current_user
 from .models import UserModel
 from .schema import RegisterUserSchema, LoginResponse
 from nanoid import generate
@@ -10,15 +10,6 @@ from fastapi.security import OAuth2PasswordRequestForm
 
 
 router = APIRouter(prefix="/users")
-
-
-@router.get("/", status_code=status.HTTP_200_OK)
-async def get_user(
-    id: str, db: Session = Depends(get_db), user=Depends(get_current_user)
-):
-    user = db.query(UserModel).filter(UserModel.id == id).first()
-    db.commit()
-    return {"status": 200, "success": True, "response": user}
 
 
 @router.post("/register", status_code=status.HTTP_201_CREATED)
@@ -37,7 +28,6 @@ async def register_user(request: RegisterUserSchema, db: Session = Depends(get_d
     db.refresh(new_user)
 
     return {
-        "status": 201,
         "success": True,
         "message": "User registered successfully",
     }
@@ -47,7 +37,7 @@ async def register_user(request: RegisterUserSchema, db: Session = Depends(get_d
 async def login_user(
     request: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)
 ):
-    user = db.query(UserModel).filter(UserModel.email == request.username).first()
+    user = db.query(UserModel).filter(UserModel.username == request.username).first()
 
     verify = verify_password(request.password, user.password)
 
@@ -57,7 +47,9 @@ async def login_user(
         )
 
     access_token = create_access_token(data={"sub": user.id})
+
     return {
+        "success": True,
         "message": "User logged in successfully",
         "access_token": access_token,
         "token_type": "bearer",

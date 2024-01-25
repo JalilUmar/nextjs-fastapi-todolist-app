@@ -18,5 +18,5 @@ class TodoResponseSchema(TodoSchema):
     userId: str
     isCompleted: bool
 
-    class Config:
+    class ConfigDict:
         from_attributes = True

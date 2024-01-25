@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, validator
+from pydantic import BaseModel, EmailStr, field_validator
 
 
 class RegisterUserSchema(BaseModel):
@@ -6,7 +6,7 @@ class RegisterUserSchema(BaseModel):
     email: EmailStr
     password: str
 
-    @validator("password")
+    @field_validator("password")
     def validate_password(cls, password: str):
         if len(password) < 5:
             raise ValueError("Password length must be greater than 5 characters")
@@ -18,7 +18,7 @@ class UserResponseSchema(BaseModel):
     username: str
     email: str
 
-    class Config:
+    class ConfigDict:
         from_attributes = True
 
 

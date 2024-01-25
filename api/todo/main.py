@@ -4,9 +4,8 @@ from fastapi import Depends, status, Response, HTTPException
 from sqlalchemy.orm import Session
 from sqlalchemy import cast, String
 from .models import TodoModel
-from dependencies import get_db
+from ..dependencies import get_db, get_current_user
 from uuid import uuid4
-from dependencies import get_current_user
 
 
 router = APIRouter(prefix="/todo")
@@ -16,29 +15,25 @@ router = APIRouter(prefix="/todo")
 async def get_all_todo(db: Session = Depends(get_db), user=Depends(get_current_user)):
     todo_list = db.query(TodoModel).filter(TodoModel.userId == user).all()
     return {
-        "status": 401,
-        "success": False,
-        "response": todo_list,
+        "success": True,
+        "response": todo_list or [],
     }
 
 
 @router.get("/{id}", status_code=status.HTTP_200_OK)
 async def get_one_todo(
     id: str,
-    res: Response,
     db: Session = Depends(get_db),
     user=Depends(get_current_user),
 ):
     todo = db.query(TodoModel).filter(TodoModel.todoId == id).first()
 
     if not todo:
-        res.status_code = status.HTTP_404_NOT_FOUND
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Todo item not found"
         )
 
     return {
-        "status": 200,
         "success": True,
         "response": todo,
     }
@@ -51,7 +46,6 @@ async def delete_todo(
     db.query(TodoModel).filter(TodoModel.todoId == id).delete(synchronize_session=False)
     db.commit()
     return {
-        "status": 200,
         "success": True,
         "message": "Todo item deleted successfully",
     }
@@ -103,4 +97,5 @@ async def update_todo(
         "status": 202,
         "success": True,
         "message": "Todo item updated successfully",
+        "response": todo,
     }

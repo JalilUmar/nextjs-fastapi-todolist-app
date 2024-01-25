@@ -1,9 +1,9 @@
 from fastapi import FastAPI
-from user.main import router as UserRouter
-from todo.main import router as TodoRouter
-import user.models as user_models
-import todo.models as todo_models
-from database import engine
+from .user.main import router as UserRouter
+from .todo.main import router as TodoRouter
+from .user import models as user_models
+from .todo import models as todo_models
+from .database import engine
 
 app = FastAPI()
 

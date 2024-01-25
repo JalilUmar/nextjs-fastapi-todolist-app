@@ -9,3 +9,6 @@ passlib
 bcrypt
 python-jose
 python-multipart
+pytest
+httpx
+requests

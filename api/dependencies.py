@@ -1,7 +1,7 @@
-from database import SessionLocal
+from .database import SessionLocal
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
-from user.utils import verify_access_token
+from .user.utils import verify_access_token
 
 
 def get_db():
