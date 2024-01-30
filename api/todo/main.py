@@ -8,7 +8,7 @@ from ..dependencies import get_db, get_current_user
 from uuid import uuid4
 
 
-router = APIRouter(prefix="/todo")
+router = APIRouter(prefix="/api/todo")
 
 
 @router.get("/", status_code=status.HTTP_200_OK)

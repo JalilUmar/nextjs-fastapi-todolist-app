@@ -9,7 +9,7 @@ from .utils import get_password_hash, create_access_token, verify_password
 from fastapi.security import OAuth2PasswordRequestForm
 
 
-router = APIRouter(prefix="/users")
+router = APIRouter(prefix="/api/users")
 
 
 @router.post("/register", status_code=status.HTTP_201_CREATED)
